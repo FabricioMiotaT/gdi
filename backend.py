@@ -21,6 +21,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
+        self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         content_length = int(self.headers['Content-Length'])
@@ -38,9 +39,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         elif self.path == "/eliminar_estudiante":
             estudiante_id = int(params['id'][0])
             self.eliminar_estudiante(estudiante_id)
-        elif self.path == "/consultar_estudiante":
-            estudiante_id = int(params['id'][0])
-            self.consultar_estudiante(estudiante_id)
         elif self.path == "/actualizar_estudiante":
             estudiante_id = int(params['id'][0])
             apellido = params['apellido'][0]
@@ -50,6 +48,21 @@ class RequestHandler(BaseHTTPRequestHandler):
             correo_institucional = params['correo_institucional'][0]
             deudas_pendientes = params['deudas_pendientes'][0].lower() == 'true'
             self.actualizar_estudiante(estudiante_id, apellido, nombres, dni, escuela_profesional, correo_institucional, deudas_pendientes)
+
+        elif self.path == "/obtener_estudiantes_con_deudas":
+            self.llamar_funcion("SELECT * FROM obtener_estudiantes_con_deudas();")
+        elif self.path == "/obtener_creditos_totales":
+            self.llamar_funcion("SELECT * FROM obtener_creditos_totales();")
+        elif self.path == "/listar_constancias_recientes":
+            self.llamar_funcion("SELECT * FROM listar_constancias_recientes();")
+        elif self.path == "/listar_entes_rectores":
+            self.llamar_funcion("SELECT * FROM listar_entes_rectores();")
+        elif self.path == "/estudiantes_sin_matricula":
+            self.llamar_funcion("SELECT * FROM estudiantes_sin_matricula();")
+        elif self.path == "/listar_estudiantes_con_deudas":
+            self.llamar_funcion("SELECT * FROM listar_estudiantes_con_deudas();")
+        elif self.path == "/historial_constancias_por_ente":
+            self.llamar_funcion("SELECT * FROM historial_constancias_por_ente();")
 
     def insertar_estudiante(self, apellido, nombres, dni, escuela_profesional, correo_institucional, deudas_pendientes):
         conn = conectar()
@@ -73,34 +86,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'Estudiante eliminado correctamente.')
 
-    def consultar_estudiante(self, estudiante_id):
-        conn = conectar()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM consultar_estudiante(%s)", (estudiante_id,))
-        estudiante = cursor.fetchone()
-        cursor.close()
-        conn.close()
-
-        if estudiante:
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            estudiante_dict = {
-                "codigo": estudiante[0],
-                "apellido": estudiante[1],
-                "nombres": estudiante[2],
-                "dni": estudiante[3],
-                "escuela_profesional": estudiante[4],
-                "correo_institucional": estudiante[5],
-                "deudas_pendientes": estudiante[6]
-            }
-            self.wfile.write(json.dumps(estudiante_dict).encode("utf-8"))
-        else:
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(b'Estudiante no encontrado.')
-
     def actualizar_estudiante(self, estudiante_id, apellido, nombres, dni, escuela_profesional, correo_institucional, deudas_pendientes):
         conn = conectar()
         cursor = conn.cursor()
@@ -112,11 +97,32 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'Estudiante actualizado correctamente.')
 
+    def llamar_funcion(self, funcion_sql):
+        conn = conectar()
+        cursor = conn.cursor()
+        try:
+            cursor.execute(funcion_sql)
+            resultados = cursor.fetchall()
+            colnames = [desc[0] for desc in cursor.description]
+            datos = [dict(zip(colnames, fila)) for fila in resultados]
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(datos).encode())
+        except Exception as e:
+            print(f"Error: {e}")
+            self.send_response(500)
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": str(e)}).encode())
+        finally:
+            cursor.close()
+            conn.close()
+
 
 def run():
     server_address = ('', 8000)
     httpd = HTTPServer(server_address, RequestHandler)
-    print("jeje")
+    print("Servidor corriendo en el puerto 8000...")
     httpd.serve_forever()
 
 run()
