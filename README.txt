@@ -45,3 +45,25 @@ PROCEDIMIENTOS EN PG ADMIN
         ORDER BY total_creditos DESC;
     END;
     $$ LANGUAGE plpgsql;
+3
+
+4 Listar Entes Rectores
+    CREATE OR REPLACE FUNCTION listar_entes_rectores()
+    RETURNS TABLE(
+        codigo INT, 
+        nombres VARCHAR, 
+        apellidos VARCHAR, 
+        cargo VARCHAR, 
+        area VARCHAR
+    ) AS $$
+    BEGIN
+        RETURN QUERY 
+        SELECT 
+            mae_ente_rector.codigo, 
+            mae_ente_rector.nombres, 
+            mae_ente_rector.apellidos, 
+            mae_ente_rector.cargo, 
+            mae_ente_rector.area
+        FROM mae_ente_rector;
+    END;
+    $$ LANGUAGE plpgsql;
