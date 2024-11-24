@@ -72,3 +72,27 @@ PROCEDIMIENTOS EN PG ADMIN
   INSERT INTO mae_estudiante (apellido, nombres, dni, escuela_profesional, correo_institucional, deudas_pendientes)
 VALUES ('López', 'Andrea', '12345679', 'Ingeniería Ambiental', 'alopez@univ.edu', FALSE);
 
+6 Estudiantes con Deudas
+    CREATE OR REPLACE FUNCTION listar_estudiantes_con_deudas()
+    RETURNS TABLE(
+        estudiante_id INT, 
+        apellido VARCHAR, 
+        nombres VARCHAR, 
+        total_deuda NUMERIC
+    ) AS $$
+    BEGIN
+        RETURN QUERY 
+        SELECT 
+            e.codigo AS estudiante_id, 
+            e.apellido, 
+            e.nombres, 
+            CAST(SUM(d.monto) AS NUMERIC) AS total_deuda
+        FROM mae_estudiante e
+        JOIN mae_deuda d ON e.codigo = d.cod_estudiante
+        WHERE d.estado = FALSE
+        GROUP BY e.codigo, e.apellido, e.nombres
+        ORDER BY total_deuda DESC;
+    END;
+    $$ LANGUAGE plpgsql;
+
+
