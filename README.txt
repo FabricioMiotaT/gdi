@@ -95,4 +95,26 @@ VALUES ('López', 'Andrea', '12345679', 'Ingeniería Ambiental', 'alopez@univ.ed
     END;
     $$ LANGUAGE plpgsql;
 
+7 Estudiantes con deudas
+    CREATE OR REPLACE FUNCTION calcular_total_deuda()
+    RETURNS TABLE(
+        estudiante_id INT, 
+        nombres VARCHAR, 
+        apellido VARCHAR, 
+        total_deuda NUMERIC
+    ) AS $$
+    BEGIN
+        RETURN QUERY 
+        SELECT 
+            e.codigo AS estudiante_id, 
+            e.nombres, 
+            e.apellido, 
+            CAST(SUM(d.monto) AS NUMERIC) AS total_deuda
+        FROM mae_estudiante e
+        JOIN mae_deuda d ON e.codigo = d.cod_estudiante
+        WHERE d.estado = TRUE
+        GROUP BY e.codigo, e.nombres, e.apellido;
+    END;
+    $$ LANGUAGE plpgsql;
+
 
