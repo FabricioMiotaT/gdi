@@ -55,10 +55,156 @@
         <button onclick="consultar('/listar_estudiantes_con_deudas')">Deudas por Estudiantes</button>
         <button onclick="consultar('/historial_constancias_por_ente')">Historial de Constancias</button>
     </div>
-
+    
     <h2>Resultados</h2>
     <div id="resultados"></div>
 
+    <h1>Consulta de Deudas Pendientes por Estudiante</h1>
+
+    <button id="deudasButton">Consultar Deudas Pendientes</button>
+
+    <div id="resultado">
+        <h2>Resultado</h2>
+        <table id="deudasTable" border="1">
+            <thead>
+                <tr>
+                    <th>ID Estudiante</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Total Deuda</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <h1>Consulta de Estudiantes Matriculados por Semestre</h1>
+
+    <form id="semestreForm" class="formulario">
+        <label for="semestre">Número de Semestre:</label>
+        <input type="number" id="semestre" name="semestre" placeholder="Ejemplo: 1, 2, 3..." required>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <div id="resultado">
+        <h2>Resultado</h2>
+        <p id="cantidad"></p>
+    </div>
+
+    <h1>Relación de Estudiantes con Matrículas</h1>
+
+    <button id="relacionButton">Consultar Relación</button>
+
+    <div id="resultado">
+        <h2>Resultado</h2>
+        <table id="relacionTable" border="1">
+            <thead>
+                <tr>
+                    <th>ID Estudiante</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>ID Matrícula</th>
+                    <th>Créditos</th>
+                    <th>Semestre</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <h2>Estudiantes con Número de Constancias Emitidas</h2>
+    <button id="consultarConstanciasButton">Consultar Número de Constancias</button>
+    <table id="constanciasTable">
+        <thead>
+            <tr>
+                <th>ID Estudiante</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Total Constancias</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>    
+ 
+    <h2>Consultar Estudiantes con Deudas Mayores a 1500</h2>
+
+    <button id="deudaMayor1500Button">Consultar</button>
+    <table id="deudaMayor1500Table" border="1">
+        <thead>
+            <tr>
+                <th>ID Estudiante</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Total Deuda</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="consulta">
+        <h3>Estudiantes con Constancias Emitidas en los Últimos 30 Días</h3>
+        <button id="btnConstanciasRecientes" onclick="consultarConstanciasRecientes()">Consultar</button>
+        <table id="tablaConstanciasRecientes">
+            <thead>
+                <tr>
+                    <th>ID Estudiante</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>DNI</th>
+                    <th>ID Constancia</th>
+                    <th>Tipo Documento</th>
+                    <th>Fecha Emisión</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="consulta">
+        <h3>Estudiantes con Matrículas Activas en el Último Semestre</h3>
+        <button id="btnMatriculasRecientes" onclick="consultarMatriculasRecientes()">Consultar</button>
+        <table id="tablaMatriculasRecientes">
+            <thead>
+                <tr>
+                    <th>ID Estudiante</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>Escuela Profesional</th>
+                    <th>Semestre Académico</th>
+                    <th>Número Semestre</th>
+                    <th>Créditos</th>
+                </tr>
+            </thead>
+            <tbody>
+        
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="consulta">
+        <h3>Estudiantes con Créditos Acumulados</h3>
+        <button id="btnCreditosAcumulados" onclick="consultarCreditosAcumulados()">Consultar</button>
+        <table id="tablaCreditosAcumulados">
+            <thead>
+                <tr>
+                    <th>ID Estudiante</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Total Créditos</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
+    
+
     <script src="script.js"></script>
+
+    
 </body>
 </html>
