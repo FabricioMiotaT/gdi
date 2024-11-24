@@ -23,3 +23,25 @@ PROCEDIMIENTOS EN PG ADMIN
         WHERE mae_estudiante.deudas_pendientes = TRUE;
     END;
     $$ LANGUAGE plpgsql;
+
+2 Obtener Creditos totales
+    CREATE OR REPLACE FUNCTION obtener_creditos_totales()
+    RETURNS TABLE(
+        estudiante_id INT, 
+        nombre VARCHAR, 
+        apellido VARCHAR, 
+        total_creditos INT
+    ) AS $$
+    BEGIN
+        RETURN QUERY 
+        SELECT 
+            e.codigo AS estudiante_id, 
+            e.nombres AS nombre, 
+            e.apellido AS apellido, 
+            COALESCE(SUM(m.creditos), 0)::INT AS total_creditos
+        FROM mae_estudiante e
+        LEFT JOIN mae_matricula m ON e.codigo = m.cod_estudiante
+        GROUP BY e.codigo, e.nombres, e.apellido
+        ORDER BY total_creditos DESC;
+    END;
+    $$ LANGUAGE plpgsql;
