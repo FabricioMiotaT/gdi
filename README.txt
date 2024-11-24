@@ -67,3 +67,8 @@ PROCEDIMIENTOS EN PG ADMIN
         FROM mae_ente_rector;
     END;
     $$ LANGUAGE plpgsql;
+
+5 Agregar este registro para probar
+  INSERT INTO mae_estudiante (apellido, nombres, dni, escuela_profesional, correo_institucional, deudas_pendientes)
+VALUES ('López', 'Andrea', '12345679', 'Ingeniería Ambiental', 'alopez@univ.edu', FALSE);
+
