@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Estudiantes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Gestion de Estudiantes</h1>
+
+    <form id="insertarForm" class="formulario">
+        <h2>Insertar Estudiante</h2>
+        <input type="text" name="apellido" placeholder="Apellido" required>
+        <input type="text" name="nombres" placeholder="Nombres" required>
+        <input type="text" name="dni" placeholder="DNI" required>
+        <input type="text" name="escuela_profesional" placeholder="Escuela Profesional" required>
+        <input type="email" name="correo_institucional" placeholder="Correo Institucional" required>
+        <label>
+            Deudas Pendientes:
+            <input type="checkbox" name="deudas_pendientes">
+        </label>
+        <button type="submit">Insertar</button>
+    </form>
+
+    <form id="eliminarForm" class="formulario">
+        <h2>Eliminar Estudiante</h2>
+        <input type="number" name="id" placeholder="ID del Estudiante" required>
+        <button type="submit">Eliminar</button>
+    </form>
+
+    <form id="consultarForm" class="formulario">
+        <h2>Consultar Estudiante</h2>
+        <input type="number" name="id" placeholder="ID del Estudiante" required>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <form id="actualizarForm" class="formulario">
+        <h2>Actualizar Estudiante</h2>
+        <input type="number" name="id" placeholder="ID del Estudiante" required>
+        <input type="text" name="apellido" placeholder="Nuevo Apellido" required>
+        <input type="text" name="nombres" placeholder="Nuevo Nombre" required>
+        <input type="text" name="dni" placeholder="Nuevo DNI" required>
+        <input type="text" name="escuela_profesional" placeholder="Nueva Escuela Profesional" required>
+        <input type="email" name="correo_institucional" placeholder="Nuevo Correo Institucional" required>
+        <label>
+            Deudas Pendientes:
+            <input type="checkbox" name="deudas_pendientes">
+        </label>
+        <button type="submit">Actualizar</button>
+    </form>
+
+    <div id="respuesta"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
