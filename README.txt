@@ -117,4 +117,29 @@ VALUES ('López', 'Andrea', '12345679', 'Ingeniería Ambiental', 'alopez@univ.ed
     END;
     $$ LANGUAGE plpgsql;
 
+8 Relacion de Estudiantes
+    CREATE OR REPLACE FUNCTION relacion_estudiantes_matriculas()
+    RETURNS TABLE(
+        estudiante_id INT, 
+        nombres VARCHAR, 
+        apellido VARCHAR, 
+        matricula_id INT, 
+        creditos INT, 
+        semestre INT
+    ) AS $$
+    BEGIN
+        RETURN QUERY 
+        SELECT 
+            e.codigo AS estudiante_id, 
+            e.nombres, 
+            e.apellido, 
+            m.codigo AS matricula_id, 
+            m.creditos, 
+            m.nro_semestre AS semestre
+        FROM mae_estudiante e
+        LEFT JOIN mae_matricula m ON e.codigo = m.cod_estudiante
+        ORDER BY e.codigo;
+    END;
+    $$ LANGUAGE plpgsql;
+
 
