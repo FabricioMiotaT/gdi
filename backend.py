@@ -2,6 +2,9 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from urllib.parse import parse_qs
 import psycopg2
+import decimal
+import datetime
+
 
 def conectar():
     return psycopg2.connect(
@@ -104,14 +107,29 @@ class RequestHandler(BaseHTTPRequestHandler):
             cursor.execute(funcion_sql)
             resultados = cursor.fetchall()
             colnames = [desc[0] for desc in cursor.description]
-            datos = [dict(zip(colnames, fila)) for fila in resultados]
+
+            datos = [
+                dict(
+                    zip(
+                        colnames,
+                        [
+                            float(x) if isinstance(x, decimal.Decimal) else
+                            x.strftime('%Y-%m-%d') if isinstance(x, (datetime.date, datetime.datetime)) else x
+                            for x in fila
+                        ]
+                    )
+                )
+                for fila in resultados
+            ]
+
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(datos).encode())
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error en la función almacenada: {e}") 
             self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({"error": str(e)}).encode())
         finally:

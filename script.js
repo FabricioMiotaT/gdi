@@ -58,13 +58,22 @@ function consultar(endpoint) {
     fetch(`http://localhost:8000${endpoint}`, {
         method: 'POST',
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                });
+            }
+            return response.json(); 
+        })
         .then(data => {
             const resultadosDiv = document.getElementById('resultados');
             resultadosDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Ocurrió un error.');
+            console.error('Error en la consulta:', error);
+            alert(`Error: ${error.message}`);
         });
 }
+
+
