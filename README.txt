@@ -1,3 +1,9 @@
+- Primero se necesita instalar la libreria de Python 
+    pip install psycopg2
+
+- Usar la extension de VSCode LiveShare para ver el Frontend
+    
+
 PROCEDIMIENTOS EN PG ADMIN
 
 1 Estudiantes con Deudas
